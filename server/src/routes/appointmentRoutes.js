@@ -1,15 +1,17 @@
-import express from "express";
-import { bookAppointment, getAppointments, getMyAppointments, cancelAppointment } from "../controllers/appointmentController.js";
-import { protect } from "../middleware/authMiddleware.js";
+import express from "express"
+import {
+  bookAppointment,
+  getMyAppointments,
+  updateAppointmentStatus,
+  cancelAppointment,
+} from "../controllers/appointmentController.js"
+import protect from "../middleware/authMiddleware.js"
 
-const router = express.Router();
+const router = express.Router()
 
-router.post("/", protect, bookAppointment);
+router.post("/",           protect, bookAppointment)
+router.get("/my",          protect, getMyAppointments)
+router.put("/:id/status",  protect, updateAppointmentStatus)
+router.put("/:id/cancel",  protect, cancelAppointment)
 
-router.get("/", protect, getAppointments);
-    
-router.get("/my", protect, getMyAppointments);
-
-router.put("/:id/cancel", protect, cancelAppointment);                                      
-
-export default router;
+export default router
