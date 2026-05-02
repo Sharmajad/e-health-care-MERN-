@@ -19,5 +19,7 @@ const hospitalSchema = new mongoose.Schema(
 )
 
 hospitalSchema.index({ city: 1 })
+hospitalSchema.index({ city: 1 })
+hospitalSchema.index({ name: 1 })
 
 export default mongoose.model("Hospital", hospitalSchema)

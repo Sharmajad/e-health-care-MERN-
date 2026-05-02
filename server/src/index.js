@@ -5,6 +5,7 @@ dotenv.config()
 import cors from "cors"
 import path from "path"
 import { fileURLToPath } from "url"
+import compression from "compression"
 import connectDB from "./config/db.js"
 import authRoutes from "./routes/authRoutes.js"
 import userRoutes from "./routes/userRoutes.js"
@@ -22,6 +23,8 @@ const startServer = async () => {
 
   app.use(cors({ origin: "http://localhost:5173", credentials: true }))
   app.use(express.json())
+  
+  app.use(compression())
   app.use("/uploads", express.static(path.join(__dirname, "../../uploads")))
 
   app.use("/api/auth",         authRoutes)

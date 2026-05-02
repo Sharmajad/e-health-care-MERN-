@@ -37,17 +37,16 @@ export default function Appointment() {
       .catch(() => setCities(["Ranchi","Jamshedpur","Dhanbad","Bokaro","Hazaribagh","Deoghar","Giridih","Dumka"]))
   }, [])
 
-  useEffect(() => {
-    if (!city) return
-    setFetching(true)
-    setHospital(null)
-    setSpeciality("")
-    setDepartments([])
-    axios.get(API + "/hospitals?city=" + city)
-      .then((res) => setHospitals(res.data))
-      .catch(() => setHospitals([]))
-      .finally(() => setFetching(false))
-  }, [city])
+ useEffect(() => {
+  if (!city) return
+  setFetching(true)
+  setHospital(null)
+  setSpeciality("")
+  axios.get(API + "/hospitals?city=" + city + "&limit=10")
+    .then((res) => setHospitals(res.data.hospitals || res.data))
+    .catch(() => setHospitals([]))
+    .finally(() => setFetching(false))
+}, [city])
 
   useEffect(() => {
     if (!hospital) return
@@ -56,15 +55,13 @@ export default function Appointment() {
   }, [hospital])
 
   useEffect(() => {
-    if (!hospital || !speciality) return
-    setFetching(true)
-    axios.get(API + "/doctors?hospital=" + encodeURIComponent(hospital.name) + "&speciality=" + encodeURIComponent(speciality))
-      .then((res) => {
-        console.log("FILTERED DOCTORS:", res.data)
-        setDoctors(res.data)})
-      .catch(() => setDoctors([]))
-      .finally(() => setFetching(false))
-  }, [hospital, speciality])
+  if (!hospital || !speciality) return
+  setFetching(true)
+  axios.get(API + "/doctors?hospital=" + encodeURIComponent(hospital.name) + "&speciality=" + encodeURIComponent(speciality) + "&limit=8")
+    .then((res) => setDoctors(res.data.doctors || res.data))
+    .catch(() => setDoctors([]))
+    .finally(() => setFetching(false))
+}, [hospital, speciality])
 
   const handleSubmit = async () => {
     if (!time) { setError("Please select a time slot"); return }

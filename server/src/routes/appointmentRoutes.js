@@ -9,9 +9,9 @@ import protect from "../middleware/authMiddleware.js"
 
 const router = express.Router()
 
-router.post("/",           protect, bookAppointment)
-router.get("/my",          protect, getMyAppointments)
-router.put("/:id/status",  protect, updateAppointmentStatus)
-router.put("/:id/cancel",  protect, cancelAppointment)
+router.post("/",          protect, bookAppointment)
+router.get("/my",         protect, getMyAppointments)
+router.put("/:id/status", protect, updateAppointmentStatus)
+router.put("/:id/cancel", protect, cancelAppointment)
 
 export default router

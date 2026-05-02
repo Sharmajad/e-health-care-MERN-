@@ -15,10 +15,17 @@ function Navbar() {
     <div className="flex justify-between items-center px-10 py-4 bg-white shadow-sm sticky top-0 z-50">
 
       {/* LOGO */}
-      <Link to="/">
-        <h1 className="text-xl font-bold text-teal-600">🩺 Svasthya Connect</h1>
-        <p className="text-xs text-gray-400">Jharkhand's Health, Connected</p>
-      </Link>
+      <Link to="/" className="flex items-center gap-3">
+  <img
+    src="/logo.jpeg"
+    alt="Svasthya Connect"
+    className="h-12 w-12 rounded-full object-contain"
+  />
+  <div>
+    <h1 className="text-xl font-bold text-teal-600">Svasthya Connect</h1>
+    <p className="text-xs text-gray-400">Seamless Health, Continuous Care</p>
+  </div>
+</Link>
 
       {/* NAV LINKS */}
       <div className="flex gap-5 text-gray-700 font-medium text-sm">

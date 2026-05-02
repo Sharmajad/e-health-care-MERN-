@@ -16,14 +16,14 @@ export default function NearbyServices() {
   const [fetching, setFetching] = useState(true)
 
   useEffect(() => {
-    Promise.all([
-      axios.get(API + "/hospitals"),
-      axios.get(API + "/doctors"),
-    ]).then(([hRes, dRes]) => {
-      setHospitals(hRes.data)
-      setDoctors(dRes.data)
-    }).catch(() => {}).finally(() => setFetching(false))
-  }, [])
+  Promise.all([
+    axios.get(API + "/hospitals?limit=20"),
+    axios.get(API + "/doctors?limit=50"),
+  ]).then(([hRes, dRes]) => {
+    setHospitals(hRes.data.hospitals || hRes.data)
+    setDoctors(dRes.data.doctors || dRes.data)
+  }).catch(() => {}).finally(() => setFetching(false))
+}, [])
 
   const getDistance = (lat1, lng1, lat2, lng2) => {
     const R = 6371

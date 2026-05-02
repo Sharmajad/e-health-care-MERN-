@@ -28,13 +28,15 @@ export default function VideoConsult() {
   }, [])
 
   useEffect(() => {
-    setFetching(true)
-    const url = city === "All" ? API + "/doctors" : API + "/doctors?city=" + city
-    axios.get(url)
-      .then((res) => setDoctors(res.data))
-      .catch(() => setDoctors([]))
-      .finally(() => setFetching(false))
-  }, [city])
+  setFetching(true)
+  const url = city === "All"
+    ? API + "/doctors?limit=12"
+    : API + "/doctors?city=" + city + "&limit=12"
+  axios.get(url)
+    .then((res) => setDoctors(res.data.doctors || res.data))
+    .catch(() => setDoctors([]))
+    .finally(() => setFetching(false))
+}, [city])
 
   const handlePayment = async () => {
     setPaymentLoading(true)

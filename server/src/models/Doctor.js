@@ -25,5 +25,7 @@ const doctorSchema = new mongoose.Schema(
 
 doctorSchema.index({ city: 1, speciality: 1 })
 doctorSchema.index({ hospital: 1 })
-
+doctorSchema.index({ city: 1, speciality: 1 })
+doctorSchema.index({ hospital: 1 })
+doctorSchema.index({ available: 1 })
 export default mongoose.model("Doctor", doctorSchema)

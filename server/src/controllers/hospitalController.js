@@ -1,13 +1,30 @@
-
 import Hospital from "../models/Hospital.js"
 
 export const getHospitals = async (req, res) => {
   try {
-    const { city } = req.query
+    const { city, page = 1, limit = 10 } = req.query
     const filter = {}
     if (city) filter.city = city
-    const hospitals = await Hospital.find(filter).sort({ name: 1 })
-    res.json(hospitals)
+
+    const skip = (parseInt(page) - 1) * parseInt(limit)
+
+    const [hospitals, total] = await Promise.all([
+      Hospital.find(filter)
+        .sort({ name: 1 })
+        .skip(skip)
+        .limit(parseInt(limit))
+        .select("name city address phone ambulance lat lng type emergency departments"),
+      Hospital.countDocuments(filter)
+    ])
+
+    res.json({
+      hospitals,
+      total,
+      page: parseInt(page),
+      pages: Math.ceil(total / parseInt(limit)),
+      hasMore: skip + hospitals.length < total,
+    })
+
   } catch (error) {
     res.status(500).json({ message: error.message })
   }

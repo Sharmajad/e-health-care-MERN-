@@ -86,7 +86,10 @@ export default function Footer() {
 
             {/* BRAND */}
             <div>
-              <h2 className="text-white text-xl font-bold mb-2">?? Svasthya Connect</h2>
+              <div className="flex items-center gap-3 mb-2">
+  <img src="/logo.jpeg" alt="Svasthya Connect" className="h-10 w-10 rounded-full object-contain bg-white" />
+  <h2 className="text-white text-xl font-bold">Svasthya Connect</h2>
+</div>
               <p className="text-gray-400 text-sm mb-4">
                 Jharkhand's trusted healthcare platform  connecting patients to doctors, hospitals and emergency services.
               </p>
