@@ -1,16 +1,11 @@
-import express from "express";
-import { addDoctor, getDoctors, getDoctorById } from "../controllers/doctorController.js";
-import { protect, authorize } from "../middleware/authMiddleware.js";
 
-const router = express.Router();
+import express from "express"
+import { getDoctors } from "../controllers/doctorController.js"
 
-// Add doctor (admin only)
-router.post("/", protect, authorize("admin"), addDoctor);
+const router = express.Router()
 
-// Get all doctors
-router.get("/", getDoctors);
+router.get("/",     getDoctors)
+// router.get("/:id",  getDoctorById)
+// router.post("/",    addDoctor)
 
-// Get doctor by ID
-router.get("/:id", getDoctorById);
-
-export default router;
+export default router

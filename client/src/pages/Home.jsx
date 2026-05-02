@@ -1,3 +1,4 @@
+import Footer from "../components/Footer"
 import { useNavigate } from "react-router-dom"
 import { useState } from "react"
 
@@ -9,7 +10,7 @@ export default function Home() {
       <ConsultSection />
       <Specialities />
       <HowItWorks />
-      <Testimonials />
+      <Footer />
       <FloatingButton />
     </div>
   )
@@ -216,28 +217,28 @@ function HowItWorks() {
 }
 
 // ─── TESTIMONIALS ─────────────────────────────────────────────────────────────
-function Testimonials() {
-  const reviews = [
-    { name: "Anjali Sharma", city: "Ranchi", text: "Booked an appointment at RIMS in minutes. Amazing platform!" },
-    { name: "Rohit Kumar", city: "Jamshedpur", text: "Video consult saved me a 2-hour trip to TMH. Very convenient." },
-    { name: "Priya Devi", city: "Dhanbad", text: "The AI report analysis explained my blood test results in simple language." },
-  ]
+// function Testimonials() {
+//   const reviews = [
+//     { name: "Anjali Sharma", city: "Ranchi", text: "Booked an appointment at RIMS in minutes. Amazing platform!" },
+//     { name: "Rohit Kumar", city: "Jamshedpur", text: "Video consult saved me a 2-hour trip to TMH. Very convenient." },
+//     { name: "Priya Devi", city: "Dhanbad", text: "The AI report analysis explained my blood test results in simple language." },
+//   ]
 
-  return (
-    <div className="px-10 mt-16 mb-16">
-      <h1 className="text-2xl font-bold mb-8 text-center text-gray-800">What Jharkhand Says</h1>
-      <div className="grid grid-cols-3 gap-6">
-        {reviews.map((r) => (
-          <div key={r.name} className="bg-white p-6 rounded-xl shadow-md border border-gray-100">
-            <p className="text-gray-600 italic mb-4">"{r.text}"</p>
-            <h3 className="font-semibold text-gray-800">{r.name}</h3>
-            <p className="text-teal-600 text-sm">{r.city}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-}
+//   return (
+//     <div className="px-10 mt-16 mb-16">
+//       <h1 className="text-2xl font-bold mb-8 text-center text-gray-800">What Jharkhand Says</h1>
+//       <div className="grid grid-cols-3 gap-6">
+//         {reviews.map((r) => (
+//           <div key={r.name} className="bg-white p-6 rounded-xl shadow-md border border-gray-100">
+//             <p className="text-gray-600 italic mb-4">"{r.text}"</p>
+//             <h3 className="font-semibold text-gray-800">{r.name}</h3>
+//             <p className="text-teal-600 text-sm">{r.city}</p>
+//           </div>
+//         ))}
+//       </div>
+//     </div>
+//   )
+// }
 
 // ─── FLOATING BUTTON ──────────────────────────────────────────────────────────
 function FloatingButton() {
@@ -251,3 +252,5 @@ function FloatingButton() {
     </button>
   )
 }
+
+<Footer />
