@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
 import { useState, useEffect, useRef } from "react"
-import { Star, ShieldCheck, Quote } from "lucide-react"
+import { Star, ShieldCheck, Quote, Mail, Phone, MessageCircle, MapPin } from "lucide-react"
 
 const reviews = [
   { name: "Anjali Sharma",   city: "Ranchi",      text: "Booked an appointment at RIMS in minutes. Amazing platform!",                          rating: 5 },
@@ -189,24 +189,30 @@ export default function Footer() {
               <h3 className="text-white font-semibold mb-4">Contact Us</h3>
               <div className="flex flex-col gap-3 text-sm">
                 <div className="flex items-start gap-2">
-                  <span></span>
+                  <MapPin size={16} className="text-indigo-400 mt-1" />
                   <p>Mahulia, Galudih<br />Jamshedpur, Jharkhand</p>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span></span>
+                  <Phone size={16} className="text-indigo-400" />
                   <a href="tel:9709899466" className="hover:text-indigo-400 transition">
                     +91 9709899466
                   </a>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span></span>
+                  <MessageCircle size={16} className="text-indigo-400" />
                   <a href="https://wa.me/919709899466" target="_blank" rel="noreferrer"
                     className="hover:text-indigo-400 transition">
-                    WhatsApp Us
+                    WhatsApp: +91 9709899466
                   </a>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span></span>
+                  <Mail size={16} className="text-indigo-400" />
+                  <a href="mailto:sharmajad@gmail.com" className="hover:text-indigo-400 transition">
+                    sharmajad@gmail.com
+                  </a>
+                </div>
+                <div className="flex items-center gap-2 pt-2">
+                  <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
                   <a href="tel:108" className="text-red-400 hover:text-red-300 transition font-semibold">
                     Emergency: 108
                   </a>

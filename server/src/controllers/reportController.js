@@ -13,7 +13,9 @@ export const analyzeReport = async (req, res) => {
   try {
     const { analysis } = req.body
     const report = new Report({
-      user: req.user._id,
+      userId: req.user._id,
+      fileName: "AI Analysis Report",
+      fileUrl: "N/A",
       analysis,
       type: "report",
     })
@@ -46,7 +48,9 @@ export const analyzeAndRecommend = async (req, res) => {
     fs.unlinkSync(file.path)
 
     const report = new Report({
-      user: req.user._id,
+      userId: req.user._id,
+      fileName: file.originalname,
+      fileUrl: "AI Processed",
       analysis,
       type: "report",
     })
@@ -73,8 +77,9 @@ export const uploadReport = async (req, res) => {
   try {
     const file = req.file
     const report = new Report({
-      user: req.user._id,
-      fileUrl: file.path,
+      userId: req.user._id,
+      fileName: file.originalname,
+      fileUrl: file.filename, // Store just the filename
       type: "report",
     })
     await report.save()
@@ -88,8 +93,9 @@ export const uploadPrescription = async (req, res) => {
   try {
     const file = req.file
     const report = new Report({
-      user: req.user._id,
-      fileUrl: file.path,
+      userId: req.user._id,
+      fileName: file.originalname,
+      fileUrl: file.filename, // Store just the filename
       type: "prescription",
     })
     await report.save()
@@ -101,7 +107,7 @@ export const uploadPrescription = async (req, res) => {
 
 export const getMyReports = async (req, res) => {
   try {
-    const reports = await Report.find({ user: req.user._id, type: "report" })
+    const reports = await Report.find({ userId: req.user._id, type: "report" })
     res.json(reports)
   } catch (error) {
     res.status(500).json({ message: error.message })
@@ -110,7 +116,7 @@ export const getMyReports = async (req, res) => {
 
 export const getMyPrescriptions = async (req, res) => {
   try {
-    const reports = await Report.find({ user: req.user._id, type: "prescription" })
+    const reports = await Report.find({ userId: req.user._id, type: "prescription" })
     res.json(reports)
   } catch (error) {
     res.status(500).json({ message: error.message })
@@ -279,10 +285,21 @@ Analyze carefully and choose the most relevant doctor specialization.`;
 
     const doctors = await getRecommendedDoctors(aiResponse.doctorType, lat, lng);
 
+    // SAVE SYMPTOM CHECK TO HISTORY
+    const report = new Report({
+      userId: req.user._id,
+      fileName: "Symptom Check: " + (symptoms.substring(0, 20)) + "...",
+      fileUrl: "N/A",
+      analysis: aiResponse.problem + "\n\n" + aiResponse.whatItMeans + "\n\nWhat to do: " + aiResponse.whatToDo.join(", "),
+      type: "report",
+    });
+    await report.save();
+
     res.json({
       success: true,
       ...aiResponse,
-      doctors
+      doctors,
+      reportId: report._id
     });
   } catch (error) {
     console.error("Analyze Symptoms Error:", error);
@@ -362,12 +379,23 @@ Analyze carefully and choose the most relevant doctor specialization.`;
 
     const doctors = await getRecommendedDoctors(aiResponse.doctorType, lat, lng);
 
-    if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+    // SAVE TO DATABASE
+    const report = new Report({
+      userId: req.user._id,
+      fileName: req.file.originalname,
+      fileUrl: req.file.filename,
+      analysis: aiResponse.problem + "\n\n" + aiResponse.whatItMeans + "\n\nWhat to do: " + aiResponse.whatToDo.join(", "),
+      type: "report",
+    });
+    await report.save();
 
+    // Note: We are NOT unlinking the file here anymore so it remains viewable in the profile.
+    
     res.json({
       success: true,
       ...aiResponse,
-      doctors
+      doctors,
+      reportId: report._id
     });
   } catch (error) {
     console.error("Analyze Report Error:", error);
@@ -375,3 +403,32 @@ Analyze carefully and choose the most relevant doctor specialization.`;
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+ e x p o r t   c o n s t   d e l e t e R e p o r t   =   a s y n c   ( r e q ,   r e s )   = >   { 
+     t r y   { 
+         c o n s t   {   i d   }   =   r e q . p a r a m s ; 
+         c o n s t   r e p o r t   =   a w a i t   R e p o r t . f i n d B y I d ( i d ) ; 
+ 
+         i f   ( ! r e p o r t )   { 
+             r e t u r n   r e s . s t a t u s ( 4 0 4 ) . j s o n ( {   m e s s a g e :   ' D o c u m e n t   n o t   f o u n d '   } ) ; 
+         } 
+ 
+         i f   ( r e p o r t . u s e r I d . t o S t r i n g ( )   ! = =   r e q . u s e r . _ i d . t o S t r i n g ( ) )   { 
+             r e t u r n   r e s . s t a t u s ( 4 0 3 ) . j s o n ( {   m e s s a g e :   ' N o t   a u t h o r i z e d   t o   d e l e t e   t h i s   d o c u m e n t '   } ) ; 
+         } 
+ 
+         i f   ( r e p o r t . f i l e U r l   & &   r e p o r t . f i l e U r l   ! = =   ' N / A '   & &   r e p o r t . f i l e U r l   ! = =   ' A I   P r o c e s s e d ' )   { 
+             c o n s t   f i l e N a m e   =   r e p o r t . f i l e U r l . r e p l a c e ( / ^ . * [ \ \ \ / ] u p l o a d s [ \ \ \ / ] / ,   ' ' ) . r e p l a c e ( / ^ u p l o a d s [ \ \ \ / ] / ,   ' ' ) . r e p l a c e ( / ^ \ / / ,   ' ' ) ; 
+             c o n s t   f i l e P a t h   =   p a t h . j o i n ( p r o c e s s . c w d ( ) ,   ' u p l o a d s ' ,   f i l e N a m e ) ; 
+             i f   ( f s . e x i s t s S y n c ( f i l e P a t h ) )   { 
+                 f s . u n l i n k S y n c ( f i l e P a t h ) ; 
+             } 
+         } 
+ 
+         a w a i t   R e p o r t . f i n d B y I d A n d D e l e t e ( i d ) ; 
+         r e s . j s o n ( {   m e s s a g e :   ' D o c u m e n t   d e l e t e d   s u c c e s s f u l l y '   } ) ; 
+     }   c a t c h   ( e r r o r )   { 
+         r e s . s t a t u s ( 5 0 0 ) . j s o n ( {   m e s s a g e :   e r r o r . m e s s a g e   } ) ; 
+     } 
+ } ;  
+ 

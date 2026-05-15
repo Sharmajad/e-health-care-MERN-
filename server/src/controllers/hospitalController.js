@@ -12,17 +12,16 @@ export const getHospitals = async (req, res) => {
     let hospitals, total;
 
     if (lat && lng) {
-      // If coordinates provided, we calculate distance and sort
-      // Note: For a truly massive DB, a 2dsphere index with $geoNear is better, 
-      // but this works universally without schema changes.
       const userLat = parseFloat(lat)
       const userLng = parseFloat(lng)
 
-      const allHospitals = await Hospital.find(filter).select("name city address phone ambulance lat lng type emergency departments image")
+      // Fetch all hospitals to calculate distance
+      const allHospitals = await Hospital.find(filter)
+        .select("name city address phone ambulance lat lng type emergency departments image popularity")
+        .lean()
       
-      // Calculate distance on the server side
       const withDistance = allHospitals.map(h => {
-        if (!h.lat || !h.lng) return { ...h._doc, distance: 9999 } // Push to end
+        if (!h.lat || !h.lng) return { ...h, distance: 9999 }
         
         const dLat = (h.lat - userLat) * Math.PI / 180
         const dLng = (h.lng - userLng) * Math.PI / 180
@@ -30,7 +29,7 @@ export const getHospitals = async (req, res) => {
                   Math.cos(userLat * Math.PI / 180) * Math.cos(h.lat * Math.PI / 180) * 
                   Math.sin(dLng/2) * Math.sin(dLng/2)
         const distance = (6371 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))).toFixed(1)
-        return { ...h._doc, distance: parseFloat(distance) }
+        return { ...h, distance: parseFloat(distance) }
       })
 
       // Sort by distance first, then popularity
@@ -48,7 +47,8 @@ export const getHospitals = async (req, res) => {
           .sort({ popularity: -1, name: 1 })
           .skip(skip)
           .limit(limitNum)
-          .select("name city address phone ambulance lat lng type emergency departments image popularity"),
+          .select("name city address phone ambulance lat lng type emergency departments image popularity")
+          .lean(),
         Hospital.countDocuments(filter)
       ])
     }

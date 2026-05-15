@@ -12,6 +12,7 @@ import Profile from "./pages/Profile"
 import NearbyServices from "./pages/NearbyServices"
 import Medicines from "./pages/Medicines"
 import Ambulance from "./pages/Ambulance"
+import CancelBooking from "./pages/CancelBooking"
 import PrivacyPolicy from "./pages/legal/PrivacyPolicy"
 import TermsOfService from "./pages/legal/TermsOfService"
 import Disclaimer from "./pages/legal/Disclaimer"
@@ -27,6 +28,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/appointment" element={<Appointment />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/cancel-booking/:id" element={<CancelBooking />} />
         <Route path="/video-consult" element={<VideoConsult />} />
         <Route path="/ai-recommend" element={<AIRecommend />} />
         <Route path="/profile" element={<Profile />} />

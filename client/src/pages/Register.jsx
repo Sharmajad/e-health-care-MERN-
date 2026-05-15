@@ -101,6 +101,7 @@ export default function Register() {
   const [phone, setPhone]     = useState("")
   const [password, setPassword] = useState("")
   const [confirm, setConfirm] = useState("")
+  const [role, setRole]       = useState("patient")
 
   // ── STEP 2 FIELDS ─────────────────────────────────────────────────────────
   const [age, setAge]                       = useState("")
@@ -154,7 +155,7 @@ export default function Register() {
     try {
       const res = await axios.post("http://localhost:5000/api/auth/register", {
         // Step 1 data
-        name, email, phone, password,
+        name, email, phone, password, role,
         // Step 2 data
         age, gender, bloodGroup, address, city, pincode,
         emergencyContact: { name: emergencyName, phone: emergencyPhone },
@@ -174,38 +175,59 @@ export default function Register() {
 
   // ── small reusable error text ──────────────────────────────────────────────
   const ErrMsg = ({ field }) =>
-    errors[field] ? <p className="text-red-500 text-xs mt-1">{errors[field]}</p> : null
+    errors[field] ? <p className="text-red-500 text-[10px] font-bold mt-1.5 ml-1">{errors[field]}</p> : null
 
   // ── border helper ──────────────────────────────────────────────────────────
   const inputCls = (field) =>
-    `w-full border px-4 py-2 rounded-lg mt-1 focus:outline-none ${
-      errors[field] ? "border-red-400 focus:border-red-400" : "focus:border-teal-500"
+    `w-full bg-gray-50 border-2 px-5 py-3 rounded-2xl mt-1.5 text-sm font-medium transition-all focus:outline-none ${
+      errors[field] ? "border-red-400 focus:border-red-400" : "border-transparent focus:border-teal-500/20 focus:bg-white"
     }`
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-10">
-      <div className="bg-white p-10 rounded-2xl shadow-md w-full max-w-lg">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-6">
+      <div className="bg-white p-10 rounded-[40px] shadow-2xl shadow-gray-200 border border-gray-100 w-full max-w-lg">
 
         {/* HEADER */}
-        <div className="text-center mb-6">
-          <h1 className="text-2xl font-bold text-teal-600">🩺 Svasthya Connect</h1>
-          <p className="text-gray-500 mt-1">Create your patient account</p>
+        <div className="text-center mb-8">
+           <div className="w-16 h-16 bg-teal-50 rounded-2xl flex items-center justify-center text-teal-600 mx-auto mb-4 border border-teal-100 shadow-sm">
+             <h1 className="text-3xl">🩺</h1>
+          </div>
+          <h1 className="text-2xl font-black text-gray-900 tracking-tight">Join Svasthya<span className="text-teal-600">Connect</span></h1>
+          <p className="text-gray-400 font-bold text-[10px] uppercase tracking-widest mt-1">Digital Health Network</p>
+        </div>
+
+        {/* ROLE SELECTOR */}
+        <div className="flex bg-gray-50 p-1.5 rounded-2xl mb-8 border border-gray-100">
+           {["patient", "doctor", "hospital"].map((r) => (
+             <button
+               key={r}
+               type="button"
+               disabled={step === 2}
+               onClick={() => setRole(r)}
+               className={`flex-1 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
+                 role === r 
+                   ? "bg-white text-teal-600 shadow-sm border border-gray-100 scale-100" 
+                   : "text-gray-400 hover:text-gray-600 scale-95"
+               } ${step === 2 ? 'opacity-50 cursor-not-allowed' : ''}`}
+             >
+               {r}
+             </button>
+           ))}
         </div>
 
         {/* STEP INDICATOR */}
-        <div className="flex items-center justify-center gap-3 mb-8">
-          <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
-            step >= 1 ? "bg-teal-600 text-white" : "bg-gray-200 text-gray-500"
+        <div className="flex items-center justify-center gap-4 mb-10">
+          <div className={`w-10 h-10 rounded-2xl flex items-center justify-center text-xs font-black transition-all ${
+            step >= 1 ? "bg-teal-600 text-white shadow-lg shadow-teal-100" : "bg-gray-100 text-gray-400"
           }`}>1</div>
-          <div className={`h-1 w-16 rounded ${step >= 2 ? "bg-teal-600" : "bg-gray-200"}`} />
-          <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
-            step >= 2 ? "bg-teal-600 text-white" : "bg-gray-200 text-gray-500"
+          <div className={`h-1.5 w-12 rounded-full transition-all ${step >= 2 ? "bg-teal-600" : "bg-gray-100"}`} />
+          <div className={`w-10 h-10 rounded-2xl flex items-center justify-center text-xs font-black transition-all ${
+            step >= 2 ? "bg-teal-600 text-white shadow-lg shadow-teal-100" : "bg-gray-100 text-gray-400"
           }`}>2</div>
         </div>
-
         {/* SERVER ERROR */}
         {error && (
-          <div className="bg-red-50 border border-red-300 text-red-600 px-4 py-3 rounded-lg mb-5 text-sm">
+          <div className="bg-red-50 border border-red-100 text-red-600 px-4 py-3 rounded-xl mb-6 text-xs font-bold transition-all animate-in fade-in zoom-in">
             {error}
           </div>
         )}
@@ -215,14 +237,16 @@ export default function Register() {
           <form onSubmit={handleStep1} className="flex flex-col gap-5" noValidate>
             <p className="text-gray-500 text-sm font-medium">Step 1 of 2 — Account Details</p>
 
-            {/* Full Name */}
+            {/* Full Name / Hospital Name / Doctor Name */}
             <div>
-              <label className="text-gray-700 font-medium text-sm">Full Name</label>
+              <label className="text-gray-700 font-black text-[10px] uppercase tracking-widest ml-1">
+                {role === "patient" ? "Full Name" : role === "doctor" ? "Doctor Name" : "Hospital Name"}
+              </label>
               <input
                 type="text"
                 value={name}
                 onChange={(e) => { setName(e.target.value); clearErr("name") }}
-                placeholder="Rahul Kumar"
+                placeholder={role === "patient" ? "Rahul Kumar" : role === "doctor" ? "Dr. Rahul Kumar" : "City Hospital"}
                 className={inputCls("name")}
               />
               <ErrMsg field="name" />
@@ -230,7 +254,7 @@ export default function Register() {
 
             {/* Email */}
             <div>
-              <label className="text-gray-700 font-medium text-sm">Email</label>
+              <label className="text-gray-700 font-black text-[10px] uppercase tracking-widest ml-1">Email Address</label>
               <input
                 type="email"
                 value={email}
@@ -283,14 +307,14 @@ export default function Register() {
 
             <button
               type="submit"
-              className="bg-teal-600 hover:bg-teal-700 text-white py-2 rounded-lg font-medium transition"
+              className="bg-teal-600 hover:bg-teal-700 text-white py-4 rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-lg shadow-teal-100 active:scale-[0.98] mt-4"
             >
-              Next →
+              Continue to Step 2 →
             </button>
 
-            <p className="text-center text-gray-500 text-sm">
+            <p className="text-center text-gray-400 text-[10px] font-bold uppercase tracking-widest mt-4">
               Already have an account?{" "}
-              <Link to="/login" className="text-teal-600 font-medium hover:underline">
+              <Link to="/login" className="text-teal-600 hover:underline">
                 Login here
               </Link>
             </p>
@@ -392,33 +416,31 @@ export default function Register() {
             </div>
 
             {/* Emergency Contact */}
-            <div className="bg-red-50 border border-red-100 rounded-xl p-4">
-              <p className="text-red-600 font-medium text-sm mb-3">🆘 Emergency Contact</p>
-              <div className="grid grid-cols-2 gap-4">
+            <div className="bg-red-50/50 border-2 border-red-50 rounded-[32px] p-6">
+              <p className="text-red-600 font-black text-[10px] uppercase tracking-widest mb-4 flex items-center gap-2">
+                <span className="animate-pulse">🆘</span> Emergency Contact
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="text-gray-700 font-medium text-sm">Contact Name</label>
+                  <label className="text-gray-700 font-black text-[10px] uppercase tracking-widest ml-1">Contact Name</label>
                   <input
                     type="text"
                     value={emergencyName}
                     onChange={(e) => { setEmergencyName(e.target.value); clearErr("emergencyName") }}
                     placeholder="e.g. Sunita Devi"
-                    className={`w-full border px-4 py-2 rounded-lg mt-1 focus:outline-none ${
-                      errors.emergencyName ? "border-red-400 focus:border-red-400" : "focus:border-red-300"
-                    }`}
+                    className={inputCls("emergencyName")}
                   />
                   <ErrMsg field="emergencyName" />
                 </div>
                 <div>
-                  <label className="text-gray-700 font-medium text-sm">Contact Phone</label>
+                  <label className="text-gray-700 font-black text-[10px] uppercase tracking-widest ml-1">Contact Phone</label>
                   <input
                     type="tel"
                     value={emergencyPhone}
                     onChange={(e) => { setEmergencyPhone(e.target.value); clearErr("emergencyPhone") }}
                     placeholder="9876543210"
                     maxLength={10}
-                    className={`w-full border px-4 py-2 rounded-lg mt-1 focus:outline-none ${
-                      errors.emergencyPhone ? "border-red-400 focus:border-red-400" : "focus:border-red-300"
-                    }`}
+                    className={inputCls("emergencyPhone")}
                   />
                   <ErrMsg field="emergencyPhone" />
                 </div>
@@ -454,20 +476,20 @@ export default function Register() {
             </div>
 
             {/* Buttons */}
-            <div className="flex gap-3">
+            <div className="flex flex-col sm:flex-row gap-4 mt-6">
               <button
                 type="button"
                 onClick={() => { setStep(1); setErrors({}) }}
-                className="flex-1 border border-gray-300 text-gray-600 py-2 rounded-lg hover:bg-gray-50 transition"
+                className="flex-1 border-2 border-gray-100 text-gray-400 py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-gray-50 transition-all active:scale-[0.98]"
               >
                 ← Back
               </button>
               <button
                 type="submit"
                 disabled={loading}
-                className="flex-1 bg-teal-600 hover:bg-teal-700 text-white py-2 rounded-lg font-medium transition disabled:opacity-50"
+                className="flex-1 bg-teal-600 hover:bg-teal-700 text-white py-4 rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-lg shadow-teal-100 active:scale-[0.98]"
               >
-                {loading ? "Creating account..." : "Create Account"}
+                {loading ? "Creating account..." : "Complete Setup"}
               </button>
             </div>
 

@@ -102,3 +102,34 @@ export const cancelAppointment = async (req, res) => {
     res.status(500).json({ message: error.message })
   }
 }
+
+export const rescheduleAppointment = async (req, res) => {
+  try {
+    const { id } = req.params
+    const { date, time } = req.body
+
+    if (!date || !time) {
+      return res.status(400).json({ message: "Date and time are required" })
+    }
+
+    const appointment = await Appointment.findById(id)
+
+    if (!appointment) {
+      return res.status(404).json({ message: "Appointment not found" })
+    }
+
+    if (appointment.patientId.toString() !== req.user.id) {
+      return res.status(403).json({ message: "Not authorized" })
+    }
+
+    appointment.date = date
+    appointment.time = time
+    appointment.status = "pending" // Rescheduling might require new confirmation
+    await appointment.save()
+
+    res.json({ message: "Appointment rescheduled successfully", appointment })
+
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+}

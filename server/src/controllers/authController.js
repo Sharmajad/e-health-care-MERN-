@@ -8,7 +8,8 @@ export const registerUser = async (req, res) => {
       name, email, password, phone,
       age, gender, bloodGroup,
       address, city, pincode,
-      emergencyContact, allergies, existingConditions
+      emergencyContact, allergies, existingConditions,
+      role
     } = req.body
 
     if (!name || !email || !password) {
@@ -24,7 +25,8 @@ export const registerUser = async (req, res) => {
       name, email, password, phone,
       age, gender, bloodGroup,
       address, city, pincode,
-      emergencyContact, allergies, existingConditions
+      emergencyContact, allergies, existingConditions,
+      role: role || "patient"
     })
 
     const token = jwt.sign(

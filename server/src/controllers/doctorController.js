@@ -57,7 +57,13 @@ export const getDoctors = async (req, res) => {
         return { ...d, distance: parseFloat(distance), lat: dLat, lng: dLng }
       })
 
-      processedDoctors.sort((a, b) => a.distance - b.distance)
+      processedDoctors.sort((a, b) => {
+        if (a.distance !== b.distance) return a.distance - b.distance
+        return (b.rating || 0) - (a.rating || 0)
+      })
+    } else {
+      // Default sort by rating if no location provided
+      processedDoctors.sort((a, b) => (b.rating || 0) - (a.rating || 0))
     }
 
     const total = processedDoctors.length

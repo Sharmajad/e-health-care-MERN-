@@ -9,7 +9,8 @@ import {
   getMyPrescriptions,
   upload,
   analyzeSymptoms,
-  analyzeReportNew
+  analyzeReportNew,
+  deleteReport
 } from "../controllers/reportController.js"
 import protect from "../middleware/authMiddleware.js"
 
@@ -22,6 +23,7 @@ router.post("/upload",                protect, upload.single("report"),       up
 router.post("/upload-prescription",   protect, upload.single("prescription"), uploadPrescription)
 router.get("/my-reports",             protect,                                getMyReports)
 router.get("/my-prescriptions",       protect,                                getMyPrescriptions)
+router.delete("/:id",                 protect,                                deleteReport)
 
 // New aiRecomend module endpoints
 router.post("/analyze-symptoms", protect, analyzeSymptoms)

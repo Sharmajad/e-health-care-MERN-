@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Mic, MicOff, MessageSquare, X, Send, Volume2, User, Bot, Globe, PhoneCall, Calendar, Pill, CheckCircle2, CreditCard, Clock, MapPin, Stethoscope, ShieldCheck, Ambulance, AlertTriangle } from "lucide-react";
+import { isAuthenticated } from "../utils/auth";
 
 const LANGUAGES = [
   { code: "en-IN", name: "English", welcome: "Hello! I am your Svasthya AI. How can I help you today?" },
@@ -21,7 +22,8 @@ const TRANSLATIONS = {
     emergency: "Emergency detected. Please select your city for immediate dispatch.",
     pharmacy: "Opening the pharmacy for you.",
     error: "I didn't quite catch that. Try saying 'Book Appointment' or 'Emergency'.",
-    cityNotFound: "City not recognized. Please pick from the list."
+    cityNotFound: "City not recognized. Please pick from the list.",
+    loginRequired: "Please login to your account to book an appointment."
   },
   "hi-IN": {
     askCity: "आप किस शहर में हैं?",
@@ -36,7 +38,8 @@ const TRANSLATIONS = {
     emergency: "आपातकाल का पता चला। तत्काल सहायता के लिए अपना शहर चुनें।",
     pharmacy: "आपके लिए फार्मेसी खोली जा रही है।",
     error: "मुझे समझ नहीं आया। 'अपॉइंटमेंट बुक करें' या 'आपातकालीन' कहें।",
-    cityNotFound: "शहर की पहचान नहीं हुई। कृपया सूची से चुनें।"
+    cityNotFound: "शहर की पहचान नहीं हुई। कृपया सूची से चुनें।",
+    loginRequired: "अपॉइंटमेंट बुक करने के लिए कृपया अपने खाते में लॉगिन करें।"
   }
 };
 
@@ -217,6 +220,10 @@ export default function VoiceAssistant() {
       setStep("EMERGENCY_CITY");
       addBotMessage(t.emergency);
     } else if (isBooking) {
+      if (!isAuthenticated()) {
+        addBotMessage(t.loginRequired);
+        return;
+      }
       setStep("BOOKING_CITY");
       addBotMessage(t.askCity);
     } else {

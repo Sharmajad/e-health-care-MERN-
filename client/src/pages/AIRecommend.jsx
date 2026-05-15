@@ -44,11 +44,8 @@ export default function AIRecommend() {
   const [userLocation, setUserLocation] = useState({ lat: 23.3441, lng: 85.3096 }) // Default Ranchi
 
   useEffect(() => {
-    if (!token) {
-      navigate("/login", { state: { from: "/ai-recommend" } })
-    }
-
-    if (navigator.geolocation) {
+    // We removed the immediate redirect to show the "Login Required" message instead
+    if (token && navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (pos) => {
           setUserLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude })
@@ -124,7 +121,44 @@ export default function AIRecommend() {
     <div className="min-h-screen bg-gray-50/50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-5xl mx-auto">
         
-        {view === "input" ? (
+        {!token ? (
+          <div className="flex flex-col items-center justify-center py-20 px-6 bg-white rounded-[40px] shadow-2xl shadow-blue-100 border border-blue-50 text-center space-y-8 animate-in zoom-in duration-500">
+            <div className="w-24 h-24 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center shadow-inner relative">
+               <Bot size={48} className="animate-bounce" />
+               <div className="absolute -top-2 -right-2 bg-red-500 text-white p-2 rounded-full border-4 border-white">
+                 <Shield size={16} />
+               </div>
+            </div>
+            <div className="space-y-4 max-w-md">
+              <h2 className="text-3xl font-black text-gray-900 tracking-tight">Login to Continue</h2>
+              <p className="text-gray-500 font-medium leading-relaxed">
+                To access our premium AI Health Recommendation tools and medical report analysis, please sign in to your account.
+              </p>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-4 w-full max-w-sm">
+              <button 
+                onClick={() => navigate("/login", { state: { from: "/ai-recommend" } })}
+                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-2xl font-black text-sm uppercase tracking-widest transition-all shadow-lg shadow-blue-200 flex items-center justify-center gap-2"
+              >
+                <User size={18} /> Login Now
+              </button>
+              <button 
+                onClick={() => navigate("/")}
+                className="flex-1 bg-white border-2 border-gray-100 hover:border-gray-200 text-gray-600 py-4 rounded-2xl font-black text-sm uppercase tracking-widest transition-all flex items-center justify-center gap-2"
+              >
+                Go Home
+              </button>
+            </div>
+            <div className="pt-8 flex items-center gap-8 border-t border-gray-50 w-full justify-center">
+              <div className="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-[2px]">
+                <Activity size={14} className="text-red-500" /> Real-time Analysis
+              </div>
+              <div className="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-[2px]">
+                <FileText size={14} className="text-blue-500" /> Report Parsing
+              </div>
+            </div>
+          </div>
+        ) : view === "input" ? (
           <div className="space-y-8 animate-in fade-in duration-500">
             <div className="text-center space-y-4">
               <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-600 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest">

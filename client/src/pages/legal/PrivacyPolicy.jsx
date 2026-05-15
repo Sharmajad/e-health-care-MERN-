@@ -41,7 +41,7 @@ const PrivacyPolicy = () => {
         <section>
           <h2 className="text-xl font-semibold text-gray-800 mb-4">5. Contact Us</h2>
           <p className="text-gray-600">
-            If you have questions about this policy, contact us at privacy@svasthyaconnect.in or visit our office in Jamshedpur, Jharkhand.
+            If you have questions about this policy, contact us at sharmajad@gmail.com or visit our office in Jamshedpur, Jharkhand.
           </p>
         </section>
       </div>
