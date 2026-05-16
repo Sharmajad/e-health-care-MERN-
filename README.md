@@ -109,8 +109,10 @@ npm run dev
 
 ---
 
-## 📄 License
-Distributed under the MIT License.
 
 ## 👥 Contributors
+<<<<<<< HEAD
 - **S Sharma** (Lead Developer)
+=======
+- **Krishna Sharma** (Lead Developer)
+>>>>>>> 71e18f39a63caba698b9a44970e2a814b8c715c9
