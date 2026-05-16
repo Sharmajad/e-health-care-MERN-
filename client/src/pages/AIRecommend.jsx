@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import axios from "axios"
+import NeuralBackground from "../components/NeuralBackground"
 import { 
   Bot, 
   MessageSquare, 
@@ -117,60 +118,81 @@ export default function AIRecommend() {
     return "bg-gray-100 text-gray-700 border-gray-200"
   }
 
-  return (
-    <div className="min-h-screen bg-gray-50/50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-5xl mx-auto">
-        
-        {!token ? (
-          <div className="flex flex-col items-center justify-center py-20 px-6 bg-white rounded-[40px] shadow-2xl shadow-blue-100 border border-blue-50 text-center space-y-8 animate-in zoom-in duration-500">
-            <div className="w-24 h-24 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center shadow-inner relative">
-               <Bot size={48} className="animate-bounce" />
-               <div className="absolute -top-2 -right-2 bg-red-500 text-white p-2 rounded-full border-4 border-white">
-                 <Shield size={16} />
-               </div>
+  if (!token) {
+    return (
+      <div className="min-h-[80vh] flex items-center justify-center px-6 py-10">
+        <div className="max-w-xl w-full bg-white rounded-[48px] shadow-2xl border border-gray-100 p-12 text-center space-y-10 animate-in zoom-in duration-500 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-48 h-48 bg-blue-50 -mr-24 -mt-24 rounded-full"></div>
+          <div className="flex justify-center relative">
+            <div className="w-24 h-24 bg-blue-600 rounded-[32px] flex items-center justify-center text-white shadow-2xl shadow-blue-200">
+              <Bot size={48} className="animate-pulse" />
             </div>
-            <div className="space-y-4 max-w-md">
-              <h2 className="text-3xl font-black text-gray-900 tracking-tight">Login to Continue</h2>
-              <p className="text-gray-500 font-medium leading-relaxed">
-                To access our premium AI Health Recommendation tools and medical report analysis, please sign in to your account.
-              </p>
-            </div>
-            <div className="flex flex-col sm:flex-row gap-4 w-full max-w-sm">
-              <button 
-                onClick={() => navigate("/login", { state: { from: "/ai-recommend" } })}
-                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-2xl font-black text-sm uppercase tracking-widest transition-all shadow-lg shadow-blue-200 flex items-center justify-center gap-2"
-              >
-                <User size={18} /> Login Now
-              </button>
-              <button 
-                onClick={() => navigate("/")}
-                className="flex-1 bg-white border-2 border-gray-100 hover:border-gray-200 text-gray-600 py-4 rounded-2xl font-black text-sm uppercase tracking-widest transition-all flex items-center justify-center gap-2"
-              >
-                Go Home
-              </button>
-            </div>
-            <div className="pt-8 flex items-center gap-8 border-t border-gray-50 w-full justify-center">
-              <div className="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-[2px]">
-                <Activity size={14} className="text-red-500" /> Real-time Analysis
-              </div>
-              <div className="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-[2px]">
-                <FileText size={14} className="text-blue-500" /> Report Parsing
-              </div>
+            <div className="absolute -top-2 -right-2 bg-red-500 text-white p-2.5 rounded-2xl border-4 border-white">
+              <Shield size={20} />
             </div>
           </div>
-        ) : view === "input" ? (
-          <div className="space-y-8 animate-in fade-in duration-500">
-            <div className="text-center space-y-4">
-              <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-600 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest">
-                <Bot size={16} className="animate-pulse" /> AI Medical Assistant
-              </div>
-              <h1 className="text-4xl font-black text-gray-900 tracking-tight">
-                AI Health Recommendation
-              </h1>
-              <p className="text-gray-500 max-w-lg mx-auto font-medium">
-                Get instant insights about your health symptoms or medical reports using advanced AI analysis.
-              </p>
+          <div className="space-y-4">
+            <h2 className="text-4xl font-black text-gray-900 tracking-tight">Login Required</h2>
+            <p className="text-gray-500 font-medium leading-relaxed max-w-sm mx-auto">
+              To access our premium AI Health Recommendation tools and medical report analysis, please sign in to your verified account.
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <button 
+              onClick={() => navigate("/login", { state: { from: "/ai-recommend" } })}
+              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-5 rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-xl shadow-blue-100 flex items-center justify-center gap-2"
+            >
+              <User size={18} /> Login Now
+            </button>
+            <button 
+              onClick={() => navigate("/")}
+              className="flex-1 bg-white border-2 border-gray-100 hover:border-gray-300 text-gray-600 py-5 rounded-2xl font-black text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-2"
+            >
+              Go Home
+            </button>
+          </div>
+          <div className="pt-8 border-t border-gray-50 flex justify-center gap-8">
+            <div className="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest">
+              <Activity size={14} className="text-blue-600" /> Real-time Analysis
             </div>
+            <div className="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest">
+              <FileText size={14} className="text-blue-600" /> Report Parsing
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50 pb-20">
+      
+      {/* ── PREMIUM HERO SECTION ── */}
+      <div className="bg-[#081120] pt-16 pb-40 px-6 relative overflow-hidden">
+        {/* NEURAL NETWORK ANIMATION */}
+        <NeuralBackground />
+        
+        {/* AMBIENT GLOWS */}
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-600/10 blur-[120px] rounded-full animate-glow"></div>
+        <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-purple-600/10 blur-[100px] rounded-full animate-drift"></div>
+        
+        <div className="max-w-5xl mx-auto relative z-10 text-center">
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-[32px] bg-white/5 text-blue-400 mb-8 border border-white/10 backdrop-blur-xl shadow-2xl animate-float-slow">
+            <Bot size={40} className="drop-shadow-[0_0_15px_rgba(59,130,246,0.5)]" />
+          </div>
+          <h1 className="text-5xl md:text-6xl font-black text-white tracking-tight mb-6">
+            Intelligent <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-purple-400">Health Neural</span>
+          </h1>
+          <p className="text-blue-100/60 font-medium text-xl max-w-2xl mx-auto leading-relaxed">
+            Experience the future of healthcare with our neural-powered analysis engine. Accurate, secure, and intelligent insights at your fingertips.
+          </p>
+        </div>
+      </div>
+
+      <div className="max-w-5xl mx-auto px-6 -mt-24 relative z-20">
+        
+        {view === "input" ? (
+          <div className="space-y-8 animate-in fade-in duration-500">
 
             {/* TABS */}
             <div className="bg-white p-2 rounded-2xl shadow-sm border border-gray-100 flex gap-2">

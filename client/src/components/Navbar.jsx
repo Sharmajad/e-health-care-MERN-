@@ -61,13 +61,6 @@ function Navbar() {
               <Link 
                 key={l.to} 
                 to={l.to} 
-                onClick={(e) => {
-                  if (l.to === "/appointment" && !isAuthenticated()) {
-                    e.preventDefault()
-                    setRedirectPath("/appointment")
-                    navigate("/login", { state: { message: "Please login to continue booking" } })
-                  }
-                }}
                 className={`flex items-center gap-2 text-[11px] font-black uppercase tracking-widest transition-all hover:text-[#0d9488] ${
                   isActive(l.to) ? "text-[#0d9488]" : "text-gray-400"
                 } ${l.className || ""}`}
@@ -128,14 +121,7 @@ function Navbar() {
               <Link 
                 key={l.to} 
                 to={l.to} 
-                onClick={(e) => {
-                  setMenuOpen(false)
-                  if (l.to === "/appointment" && !isAuthenticated()) {
-                    e.preventDefault()
-                    setRedirectPath("/appointment")
-                    navigate("/login", { state: { message: "Please login to continue booking" } })
-                  }
-                }}
+                onClick={() => setMenuOpen(false)}
                 className={`flex flex-col items-center gap-3 p-6 rounded-3xl border border-gray-50 text-[10px] font-black uppercase tracking-widest transition-all ${
                   isActive(l.to) ? "bg-teal-50 text-[#0d9488] border-teal-100" : "bg-gray-50 text-gray-400"
                 } ${l.className || ""}`}

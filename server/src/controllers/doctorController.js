@@ -4,8 +4,8 @@ export const getDoctors = async (req, res) => {
   try {
     const { city, speciality, hospital, page = 1, limit = 10, lat, lng } = req.query
     const filter = {}
-    if (city)       filter.city = city
-    if (speciality) filter.speciality = speciality
+    if (city)       filter.city = { $regex: city, $options: 'i' }
+    if (speciality) filter.speciality = { $regex: speciality, $options: 'i' }
     if (hospital)   filter.hospital = hospital
 
     const skip = (parseInt(page) - 1) * parseInt(limit)

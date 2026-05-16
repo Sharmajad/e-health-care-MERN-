@@ -83,40 +83,39 @@ export default function Medicines() {
   }
 
   return (
-    <div className="min-h-screen bg-white relative overflow-hidden">
+    <div className="min-h-screen bg-gray-50 pb-20">
       
-      {/* ── PREMIUM BACKGROUND DECORATION ── */}
-      <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-b from-teal-50/40 via-white to-transparent -z-10"></div>
-      <div className="absolute top-20 right-[-5%] w-[500px] h-[500px] bg-teal-100/20 rounded-full blur-[120px] -z-10 animate-pulse"></div>
-      <div className="absolute top-40 left-[-5%] w-[400px] h-[400px] bg-emerald-50/30 rounded-full blur-[100px] -z-10"></div>
-      
-      {/* Floating Icons */}
-      <Pill className="absolute top-32 left-10 text-teal-600/10 w-24 h-24 float-1 -z-10" />
-      <Syringe className="absolute top-60 right-20 text-teal-600/5 w-32 h-32 float-2 -z-10" />
-      <Microscope className="absolute bottom-40 right-10 text-teal-600/5 w-40 h-40 float-3 -z-10" />
-
-      <div className="max-w-6xl mx-auto px-6 py-20 relative z-10">
-
-        {/* ── REDESIGNED HERO SECTION ── */}
-        <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-20 animate-in fade-in slide-in-from-top-10 duration-1000">
-          <div className="inline-flex items-center gap-3 bg-white/80 backdrop-blur-md px-6 py-2.5 rounded-full border border-teal-100 shadow-xl shadow-teal-900/5 mb-8 group hover:scale-105 transition-transform duration-500">
-            <div className="w-8 h-8 bg-teal-600 rounded-full flex items-center justify-center text-white shadow-lg shadow-teal-200">
+      {/* ── PREMIUM HERO SECTION ── */}
+      <div className="bg-gray-900 pt-16 pb-32 px-6 relative overflow-hidden">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-teal-500/20 blur-[100px] rounded-full animate-glow"></div>
+        <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-emerald-500/20 blur-[80px] rounded-full animate-drift"></div>
+        
+        {/* Floating Icons */}
+        <Pill className="absolute top-32 left-10 text-white/5 w-24 h-24 float-1 -z-10" />
+        <Syringe className="absolute top-60 right-20 text-white/5 w-32 h-32 float-2 -z-10" />
+        
+        <div className="max-w-5xl mx-auto relative z-10 text-center">
+          <div className="inline-flex items-center gap-3 bg-white/10 backdrop-blur-md px-6 py-2.5 rounded-full border border-white/5 shadow-xl mb-8 group hover:scale-105 transition-transform duration-500">
+            <div className="w-8 h-8 bg-teal-500 rounded-full flex items-center justify-center text-white shadow-lg shadow-teal-500/50">
               <Zap size={14} className="animate-pulse" />
             </div>
-            <span className="text-[11px] font-black text-gray-800 uppercase tracking-[0.2em]">Verified Marketplace</span>
-            <div className="h-4 w-px bg-gray-200 mx-2"></div>
-            <span className="text-[10px] font-bold text-teal-600 uppercase">24hr Delivery</span>
+            <span className="text-[11px] font-black text-white uppercase tracking-[0.2em]">Verified Marketplace</span>
+            <div className="h-4 w-px bg-white/20 mx-2"></div>
+            <span className="text-[10px] font-bold text-teal-400 uppercase">24hr Delivery</span>
           </div>
 
-          <h1 className="text-4xl md:text-6xl font-black text-gray-900 tracking-tight leading-[1.1] mb-8">
+          <h1 className="text-4xl md:text-6xl font-black text-white tracking-tight leading-[1.1] mb-6">
             The Smart <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 via-emerald-600 to-teal-700">Pharmacy Network</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-emerald-300">Pharmacy Network</span>
           </h1>
           
-          <p className="text-gray-500 font-medium text-lg md:text-xl leading-relaxed max-w-2xl">
-            Compare live prices across India's top medical platforms. Secure authentic medicines with express delivery to <span className="text-gray-900 font-bold underline decoration-teal-400 underline-offset-8">Jharkhand</span>.
+          <p className="text-gray-400 font-medium text-lg md:text-xl leading-relaxed max-w-2xl mx-auto">
+            Compare live prices across India's top medical platforms. Secure authentic medicines with express delivery to <span className="text-white font-bold underline decoration-teal-400 underline-offset-8">Jharkhand</span>.
           </p>
         </div>
+      </div>
+
+      <div className="max-w-6xl mx-auto px-6 -mt-16 relative z-20">
 
         {/* ── PREMIUM SEARCH BAR ── */}
         <div className="max-w-4xl mx-auto mb-24 animate-in fade-in slide-in-from-bottom-10 duration-1000 delay-200">
