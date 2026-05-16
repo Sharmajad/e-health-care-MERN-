@@ -104,6 +104,7 @@ export default function VoiceAssistant() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isOpen]);
 
+  // Initialize Web Speech API for voice recognition
   useEffect(() => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (SpeechRecognition) {
@@ -115,11 +116,13 @@ export default function VoiceAssistant() {
     }
   }, [currentLang]);
 
+  // Convert text to speech using browser's synthesis engine
   const speak = (text) => {
     if ("speechSynthesis" in window) {
-      window.speechSynthesis.cancel();
+      window.speechSynthesis.cancel(); // Stop any ongoing speech
       const utterance = new SpeechSynthesisUtterance(text);
       const voices = window.speechSynthesis.getVoices();
+      // Try to find a natural female voice for the assistant
       let voice = voices.find(v => v.lang === currentLang.code && (v.name.includes("Female") || v.name.includes("Kalpana")));
       if (!voice) voice = voices.find(v => v.lang.startsWith(currentLang.code.split('-')[0]));
       if (voice) utterance.voice = voice;
@@ -135,10 +138,11 @@ export default function VoiceAssistant() {
     speak(text);
   };
 
+  // Core logic to handle user queries based on the current step in the flow
   const processIntent = useCallback((query) => {
     const lowerQuery = query.toLowerCase();
 
-    // ── EMERGENCY FLOW ──────────────────────────────────────────────────────
+    // ── EMERGENCY FLOW (Dispatching Ambulance) ───────────────────────────────
     if (step === "EMERGENCY_CITY") {
       const foundCity = CITIES.find(c => lowerQuery.includes(c.en.toLowerCase()) || c.hi.some(h => lowerQuery.includes(h)));
       if (foundCity) {
@@ -212,7 +216,7 @@ export default function VoiceAssistant() {
       return;
     }
 
-    // ── GLOBAL COMMANDS ─────────────────────────────────────────────────────
+    // ── GLOBAL COMMANDS (Detecting initial intent) ───────────────────────────
     const isEmergency = lowerQuery.includes("ambulance") || lowerQuery.includes("emergency") || lowerQuery.includes("एम्बुलेंस") || lowerQuery.includes("इमरजेंसी");
     const isBooking = lowerQuery.includes("book") || lowerQuery.includes("appointment") || lowerQuery.includes("अपॉइंटमेंट") || lowerQuery.includes("बुक");
 

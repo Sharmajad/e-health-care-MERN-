@@ -35,17 +35,17 @@ const COMMON_SYMPTOMS = [
 export default function AIRecommend() {
   const navigate = useNavigate()
   const token = localStorage.getItem("token")
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false) // Loading state for API calls
   const [error, setError] = useState(null)
-  const [recommendation, setRecommendation] = useState(null)
-  const [view, setView] = useState("input") // 'input' or 'results'
-  const [activeTab, setActiveTab] = useState("symptoms") // 'symptoms' or 'report'
+  const [recommendation, setRecommendation] = useState(null) // AI response data
+  const [view, setView] = useState("input") // Toggle between 'input' form and 'results' dashboard
+  const [activeTab, setActiveTab] = useState("symptoms") // Sub-tab for symptom text vs file upload
   const [symptomText, setSymptomText] = useState("")
   const [reportFile, setReportFile] = useState(null)
-  const [userLocation, setUserLocation] = useState({ lat: 23.3441, lng: 85.3096 }) // Default Ranchi
+  const [userLocation, setUserLocation] = useState({ lat: 23.3441, lng: 85.3096 }) // Default to Ranchi coordinates
 
   useEffect(() => {
-    // We removed the immediate redirect to show the "Login Required" message instead
+    // Get user's current location for nearby doctor recommendations
     if (token && navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (pos) => {
@@ -61,6 +61,7 @@ export default function AIRecommend() {
     setLoading(true)
     setError(null)
     try {
+      // Send symptoms text and location to AI recommend endpoint
       const res = await axios.post("http://localhost:5000/api/aiRecomend/analyze-symptoms", { 
         symptoms: symptomText,
         lat: userLocation.lat,
@@ -69,7 +70,7 @@ export default function AIRecommend() {
         headers: { Authorization: "Bearer " + token }
       })
       setRecommendation(res.data)
-      setView("results")
+      setView("results") // Switch to results view on success
     } catch (err) {
       console.error("AI Analysis failed", err)
       setError("AI analysis failed. Please try again.")
@@ -83,6 +84,7 @@ export default function AIRecommend() {
     setLoading(true)
     setError(null)
     try {
+      // Use FormData to send file and coordinates
       const formData = new FormData()
       formData.append("lat", userLocation.lat)
       formData.append("lng", userLocation.lng)

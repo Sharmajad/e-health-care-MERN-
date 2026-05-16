@@ -1,15 +1,34 @@
+/**
+ * ================================================================
+ * USER CONTROLLER — controllers/userController.js
+ * ================================================================
+ * Handles updating the authenticated user's profile.
+ *
+ * updateUserProfile  PUT /api/users/update
+ *   Accepts any combination of profile fields in req.body and
+ *   applies them with $set. Intentionally blocks changes to
+ *   password, email, and role — those require dedicated flows.
+ * ================================================================
+ */
+
 import User from "../models/User.js"
 
+/**
+ * PUT /api/users/update
+ * Partially updates the profile of the authenticated user.
+ * Password, email, and role are protected and cannot be changed here.
+ */
 export const updateUserProfile = async (req, res) => {
   try {
     const userId = req.user.id
     const updates = req.body
 
-    // Don't allow password or email updates through this endpoint for now
+    // Strip sensitive fields — these must be changed through dedicated endpoints
     delete updates.password
     delete updates.email
     delete updates.role
 
+    // Apply the remaining fields and return the updated document (without the password hash)
     const user = await User.findByIdAndUpdate(
       userId,
       { $set: updates },
@@ -20,6 +39,7 @@ export const updateUserProfile = async (req, res) => {
       return res.status(404).json({ message: "User not found" })
     }
 
+    // Return the full updated profile so the frontend can refresh its local state
     res.json({
       message: "Profile updated successfully",
       user: {

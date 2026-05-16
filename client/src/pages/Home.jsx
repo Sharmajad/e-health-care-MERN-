@@ -32,6 +32,7 @@ import {
 export default function Home() {
   return (
     <div className="min-h-screen bg-white relative selection:bg-teal-200 selection:text-teal-900 overflow-x-hidden">
+      {/* Main landing page sections */}
       <Hero />
       <Features />
       <ConsultSection />
@@ -95,11 +96,12 @@ function Hero() {
         </p>
 
         {/* Search Box */}
+        {/* Main Search and Navigation Bar */}
         <div className="max-w-4xl mx-auto mb-10 animate-slide-up opacity-0 [animation-fill-mode:forwards] delay-500">
           <div className="bg-white rounded-[32px] p-2 md:p-3 shadow-2xl shadow-black/10">
             <div className="flex flex-col md:flex-row gap-3">
               
-              {/* CUSTOM CITY DROPDOWN */}
+              {/* City Selection Dropdown */}
               <div className="md:w-[32%] relative" ref={dropdownRef}>
                 <button 
                   onClick={() => setCityOpen(!cityOpen)}
@@ -138,7 +140,7 @@ function Hero() {
                 )}
               </div>
               
-              {/* SEARCH INPUT */}
+              {/* Speciality/Doctor Search Input */}
               <div className="flex-1 relative group">
                 <div className="absolute left-4 top-1/2 -translate-y-1/2 w-9 h-9 rounded-xl bg-teal-50 flex items-center justify-center text-teal-600 group-focus-within:scale-110 transition-all">
                   <Search size={18} />
@@ -152,6 +154,7 @@ function Hero() {
                 />
               </div>
 
+              {/* Action Button */}
               <button 
                 onClick={() => navigate("/appointment")}
                 className="bg-[#0d9488] text-white px-10 py-4 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-[#0b7a6f] transition-all hover:shadow-xl hover:shadow-teal-900/20 flex items-center justify-center gap-2 group/btn"
@@ -271,6 +274,7 @@ function Features() {
           <h3 className="text-4xl font-black text-gray-900 tracking-tight">Everything You Need</h3>
         </div>
 
+        {/* Feature Cards Grid */}
         <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
           {features.map((f, idx) => (
             <div 
@@ -319,6 +323,7 @@ function ConsultSection() {
           <h3 className="text-4xl font-black text-gray-900 tracking-tight">Consult Top Doctors Online</h3>
         </div>
 
+        {/* List of online consultation categories */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {items.map((item) => (
             <div 
@@ -386,6 +391,7 @@ function Specialities() {
           </div>
         </div>
 
+        {/* Horizontal scrollable speciality list */}
         <div 
           ref={scrollRef}
           className="flex gap-6 overflow-x-auto pb-12 snap-x no-scrollbar px-4"

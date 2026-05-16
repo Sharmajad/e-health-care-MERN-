@@ -1,3 +1,21 @@
+/**
+ * FOOTER COMPONENT — components/Footer.jsx
+ * ──────────────────────────────────────────
+ * Full-width footer rendered at the bottom of select pages.
+ * NOT globally mounted — individual pages import it directly.
+ *
+ * Sub-components:
+ *  MovingReviews   — Auto-scrolling horizontal testimonial carousel
+ *                    with hardcoded patient reviews (doubled for seamless loop)
+ *
+ * Sections:
+ *  - Brand column:     Logo, tagline, social media links (FB, IG, X, WhatsApp)
+ *  - Quick Links:      Navigation shortcuts to all major pages
+ *  - Contact Us:       Address, phone, WhatsApp, email, emergency 108
+ *  - Write a Review:   Simple form (not persisted — shows a thank-you toast)
+ *  - Bottom bar:       Copyright + legal page links
+ */
+
 import { Link } from "react-router-dom"
 import { useState, useEffect, useRef } from "react"
 import { Star, ShieldCheck, Quote, Mail, Phone, MessageCircle, MapPin } from "lucide-react"

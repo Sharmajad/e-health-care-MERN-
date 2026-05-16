@@ -19,13 +19,16 @@ import { isAuthenticated, setRedirectPath } from "../utils/auth"
 function Navbar() {
   const navigate = useNavigate()
   const location = useLocation()
-  const [menuOpen, setMenuOpen] = useState(false)
-  const user  = JSON.parse(localStorage.getItem("user") || "{}")
-  const isAuth = isAuthenticated()
+  const [menuOpen, setMenuOpen] = useState(false) // Toggle for mobile menu
+  const user  = JSON.parse(localStorage.getItem("user") || "{}") // Get user info from storage
+  const isAuth = isAuthenticated() // Check if user is logged in
 
   const handleLogout = () => {
-    localStorage.removeItem("token"); localStorage.removeItem("user")
-    navigate("/login"); setMenuOpen(false)
+    // Clear user session and redirect to login
+    localStorage.removeItem("token")
+    localStorage.removeItem("user")
+    navigate("/login")
+    setMenuOpen(false)
   }
 
   const navLinks = [
@@ -43,6 +46,7 @@ function Navbar() {
     <nav className="bg-white/80 backdrop-blur-xl border-b border-gray-100 sticky top-0 z-[100]">
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
         <div className="flex justify-between items-center h-20">
+          {/* Brand Logo and Name */}
 
           {/* LOGO */}
           <Link to="/" className="flex items-center gap-3 group" onClick={() => setMenuOpen(false)}>
@@ -55,7 +59,7 @@ function Navbar() {
             </div>
           </Link>
 
-          {/* DESKTOP NAV */}
+          {/* Main Navigation Links (Desktop) */}
           <div className="hidden lg:flex items-center gap-8">
             {navLinks.map((l) => (
               <Link 
@@ -98,7 +102,7 @@ function Navbar() {
             )}
           </div>
 
-          {/* MOBILE TOGGLE */}
+          {/* Mobile Menu Toggle Button */}
           <div className="flex lg:hidden items-center gap-4">
             {isAuth && (
               <Link to="/dashboard" className="w-9 h-9 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 border border-gray-100">

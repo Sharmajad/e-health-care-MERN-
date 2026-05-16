@@ -59,6 +59,7 @@ export default function Profile() {
     fetchAllData()
   }, [])
 
+  // Initial data fetch for appointments and documents
   const fetchAllData = async () => {
     setLoading(true)
     try {
@@ -87,11 +88,13 @@ export default function Profile() {
     return isPast || a.status === "completed" || a.status === "cancelled";
   });
 
+  // Update user profile information
   const handleSaveProfile = async () => {
     try {
       const res = await axios.put("http://localhost:5000/api/users/update", editForm, {
         headers: { Authorization: `Bearer ${token}` }
       })
+      // Update local storage and component state with new user data
       localStorage.setItem("user", JSON.stringify(res.data.user))
       setUserData(res.data.user)
       setIsEditing(false)
@@ -102,6 +105,7 @@ export default function Profile() {
     }
   }
 
+  // Upload a medical report PDF or Image
   const handleReportUpload = async (e) => {
     const file = e.target.files[0]
     if (!file) return
@@ -117,7 +121,7 @@ export default function Profile() {
         headers: { Authorization: "Bearer " + token }
       })
       setUploadSuccess("Report uploaded!")
-      fetchAllData()
+      fetchAllData() // Refresh list
     } catch (err) { setUploadError("Upload failed.") } 
     finally { setUploadingReport(false) }
   }
@@ -144,6 +148,7 @@ export default function Profile() {
 
   const [selectedFile, setSelectedFile] = useState(null)
 
+  // Delete a specific medical document
   const handleDeleteFile = async (id) => {
     if (!window.confirm("Are you sure you want to delete this document?")) return
     try {
@@ -152,8 +157,8 @@ export default function Profile() {
         headers: { Authorization: "Bearer " + token }
       })
       setUploadSuccess("Document deleted successfully")
-      fetchAllData()
-      setSelectedFile(null)
+      fetchAllData() // Refresh list
+      setSelectedFile(null) // Close viewer if open
     } catch (err) {
       console.error("Delete failed", err)
       setUploadError("Failed to delete document.")

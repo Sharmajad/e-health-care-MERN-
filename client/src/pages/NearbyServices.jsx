@@ -30,6 +30,7 @@ const UserIcon = L.divIcon({
 
 const API = "http://localhost:5000/api"
 
+// Component to capture map clicks and update the search location
 function MapClickHandler({ onLocationSelect }) {
   useMapEvents({
     click: (e) => {
@@ -39,6 +40,7 @@ function MapClickHandler({ onLocationSelect }) {
   return null;
 }
 
+// Component to programmatically update map center and zoom
 function ChangeView({ center, zoom }) {
   const map = useMap();
   const lastCenterRef = useRef(null);
@@ -80,6 +82,7 @@ export default function NearbyServices() {
   const [hasAttemptedLoc, setHasAttemptedLoc] = useState(false)
   const defaultCenter = [22.8046, 86.2029] // Jamshedpur (TMH coordinates)
 
+  // Main function to fetch hospitals and doctors based on location/city
   const fetchData = useCallback(async () => {
     // If we haven't even tried to get location yet, wait
     if (!hasAttemptedLoc) return
@@ -93,7 +96,7 @@ export default function NearbyServices() {
       const hUrl = `${API}/hospitals?page=${hPage}&limit=10${locQuery}${cityQuery}`
       const dUrl = `${API}/doctors?page=${dPage}&limit=10${locQuery}${cityQuery}`
 
-      // Fetch All Data for Map Pins
+      // Fetch All Data for Map Pins (unpaginated for the map)
       const hAllUrl = `${API}/hospitals?limit=500${locQuery}${cityQuery}`
       const dAllUrl = `${API}/doctors?limit=1000${locQuery}${cityQuery}`
 
@@ -139,6 +142,7 @@ export default function NearbyServices() {
     fetchData()
   }, [fetchData])
 
+  // Detect user's current GPS position
   const getLocation = () => {
     setLocating(true)
     setLocError(null)

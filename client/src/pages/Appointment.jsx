@@ -90,7 +90,7 @@ export default function Appointment() {
 
   const [validationError, setValidationError] = useState("")
 
-  // PERSISTENCE LOGIC
+  // PERSISTENCE LOGIC: Recover booking state from localStorage on page load
   useEffect(() => {
     const saved = localStorage.getItem("pendingBooking")
     if (saved) {
@@ -126,7 +126,7 @@ export default function Appointment() {
     localStorage.setItem("pendingBooking", JSON.stringify(bookingContext))
   }, [fromAI, selectedCity, selectedHospital, selectedHospitalId, selectedDepartment, selectedDoctor, consultType, date, time, patientData, currentStep])
 
-  // Only jump to step 3 if we JUST arrived from AI Recommendation
+  // Handle incoming selection from AI recommendation page
   useEffect(() => {
     if (location.state?.fromAI) {
       setFromAI(true)
@@ -134,7 +134,7 @@ export default function Appointment() {
       setSelectedCity(location.state.city)
       setSelectedHospital(location.state.hospital)
       if (location.state.doctor?.speciality) setSelectedDepartment(location.state.doctor.speciality)
-      setCurrentStep(3) // Adjusted step index
+      setCurrentStep(3) // Jump straight to scheduling
     } else if (location.state === null && !localStorage.getItem("pendingBooking")) {
       setFromAI(false)
     }
@@ -274,6 +274,7 @@ export default function Appointment() {
     }
   }, [selectedHospital, selectedDepartment])
 
+  // Multi-step form navigation logic with validation
   const handleNext = () => {
     setValidationError("")
 
@@ -304,6 +305,7 @@ export default function Appointment() {
     if (currentStep > 1) setCurrentStep(currentStep - 1)
   }
 
+  // Final submission of the appointment booking
   const handleBooking = async () => {
     if (!token) {
       setValidationError("Please login to complete your booking.")
@@ -331,7 +333,7 @@ export default function Appointment() {
         },
         { headers: { Authorization: "Bearer " + token } }
       )
-      localStorage.removeItem("pendingBooking")
+      localStorage.removeItem("pendingBooking") // Clear local draft on success
       setSuccess(true)
     } catch (err) {
       setError(err.response?.data?.message || "Booking failed. Please try again.")
