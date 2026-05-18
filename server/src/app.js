@@ -3,6 +3,7 @@ import cors from "cors"
 import path from "path"
 import { fileURLToPath } from "url"
 import compression from "compression"
+
 import authRoutes from "./routes/authRoutes.js"
 import userRoutes from "./routes/userRoutes.js"
 import appointmentRoutes from "./routes/appointmentRoutes.js"
@@ -15,11 +16,22 @@ const __dirname = path.dirname(__filename)
 
 const app = express()
 
-app.use(cors({ origin: "http://localhost:5173", credentials: true }))
-app.use(express.json())
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL,
+    credentials: true,
+  })
+)
+
+app.use(express.json({ limit: "10mb" }))
 
 app.use(compression())
+
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")))
+
+app.get("/", (req, res) => {
+  res.send("Svasthya Connect Backend Running")
+})
 
 app.use("/api/auth", authRoutes)
 app.use("/api/users", userRoutes)
